@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="testbutton" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oyu-y8-wFJ">
+                                <rect key="frame" x="84.666666666666686" y="291" width="224" height="114"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="france"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FC6-K3-Xzy">
+                                <rect key="frame" x="84.666666666666686" y="444" width="224" height="114"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="france"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wmq-G5-K8V">
+                                <rect key="frame" x="84.666666666666686" y="148" width="224" height="114"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="france"/>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="FC6-K3-Xzy" firstAttribute="centerX" secondItem="oyu-y8-wFJ" secondAttribute="centerX" id="2lw-VW-bB6"/>
+                            <constraint firstItem="Wmq-G5-K8V" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="4oY-8Q-2VQ"/>
+                            <constraint firstItem="Wmq-G5-K8V" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="89" id="Zdn-wB-6zv"/>
+                            <constraint firstItem="oyu-y8-wFJ" firstAttribute="centerX" secondItem="Wmq-G5-K8V" secondAttribute="centerX" id="as4-TJ-ZCj"/>
+                            <constraint firstItem="oyu-y8-wFJ" firstAttribute="top" secondItem="Wmq-G5-K8V" secondAttribute="bottom" constant="29" id="cT4-df-yu6"/>
+                            <constraint firstItem="FC6-K3-Xzy" firstAttribute="top" secondItem="oyu-y8-wFJ" secondAttribute="bottom" constant="39" id="zn8-y8-VNt"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="buton1" destination="Wmq-G5-K8V" id="zOZ-MF-rwd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="33" y="-27"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="france" width="200" height="100"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
