@@ -12,24 +12,36 @@ class ViewController: UITableViewController {
     var petitions = [Petition]()
     var filteredPetitions = [Petition]()
     
+        func doFilter(ac: UIAlertController) {
+        if let filteredWords = ac.textFields?[0].text {
+            self.filteredPetitions = self.petitions
+            if(!filteredWords.isEmpty) {
+                self.filteredPetitions = self.filteredPetitions.filter { $0.body.lowercased().contains(filteredWords.lowercased()) || $0.title.lowercased().contains(filteredWords.lowercased()) }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     
     @objc func filterData() {
         let ac = UIAlertController(title: "Filter", message: "Filter by keyword", preferredStyle: .alert)
         ac.addTextField()
         ac.addAction(UIAlertAction(title: "Filter", style: .default, handler: { action in
-            if let filteredWords = ac.textFields?[0].text {
-                self.filteredPetitions = self.petitions
-                if(!filteredWords.isEmpty) {
-                    self.filteredPetitions = self.filteredPetitions.filter { $0.body.lowercased().contains(filteredWords.lowercased()) || $0.title.lowercased().contains(filteredWords.lowercased()) }
-                    self.tableView.reloadData()
-                    return
-                }
-                
-                self.tableView.reloadData()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.doFilter(ac: ac)
             }
         }))
         
-        present(ac,animated: true)
+        DispatchQueue.main.async {
+            self.present(ac,animated: true)
+        }
+       
     }
 
     override func viewDidLoad() {
