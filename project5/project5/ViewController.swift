@@ -11,12 +11,76 @@ class ViewController: UITableViewController {
     
     var allWords = [String]()
     var usedWords = [String]()
+    var currentWords:String = ""
+    var allEntries = [String]()
     
+    func loadInitialTitleAndEntries() -> (loadedTitle: String?, loadedEntries:[String]) {
+        let defaults = UserDefaults.standard
+        var loadedTitle:String?
+        var loadedEntries = [String]()
+        if let savedCurrentWord = defaults.object(forKey: "currentWord") as? Data {
+            let jsonDecoder = JSONDecoder()
+            
+            do {
+                loadedTitle = try jsonDecoder.decode(String.self, from: savedCurrentWord)
+            } catch {
+                print("failed to decode")
+            }
+        }
+        
+        if let savedEntries = defaults.object(forKey: "entries") as? Data {
+            let jsonDecoder = JSONDecoder()
+            
+            do {
+                loadedEntries = try jsonDecoder.decode([String].self, from: savedEntries)
+            } catch {
+                print("failed to decode")
+            }
+        }
+        return (loadedTitle:loadedTitle, loadedEntries: loadedEntries)
+    }
     
     @objc func startGame() {
-        title = allWords.randomElement()
-        usedWords.removeAll(keepingCapacity: true)
-        tableView.reloadData()
+        let (loadedTitle, loadedEntries) = loadInitialTitleAndEntries()
+        if let currentTitle = loadedTitle {
+            title = currentTitle
+        } else {
+            title = allWords.randomElement()
+            usedWords.removeAll(keepingCapacity: true)
+            save(for: title!, with: "currentWord")
+            tableView.reloadData()
+        }
+    
+        if !loadedEntries.isEmpty {
+            usedWords = loadedEntries
+        }
+    }
+    
+    @objc func newGame() {
+        save(for: nil, with: "currentWord")
+        saveEntries(data: [String]())
+        startGame()
+    }
+    
+    func save(for data:String?, with key:String) {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(data) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: key)
+        } else {
+            print("Failed to save current wordds")
+        }
+    }
+    
+    func saveEntries(data:[String]) {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(data) {
+            let defaults = UserDefaults.standard
+            print(savedData)
+            defaults.set(savedData, forKey: "entries")
+        } else {
+            print("Failed to save current wordds")
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -47,6 +111,7 @@ class ViewController: UITableViewController {
                         
                         let indexPath = IndexPath(row: 0, section: 0)
                         tableView.insertRows(at: [indexPath], with: .automatic)
+                        saveEntries(data: usedWords)
                         return
                     } else {
                         showErrorMessage(title: "cannot be starter words", message: "cannot be starter words")
@@ -118,7 +183,7 @@ class ViewController: UITableViewController {
             allWords = ["silkworm"]
         }
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "New Game", style: .done, target: self, action: #selector(startGame))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "New Game", style: .done, target: self, action: #selector(newGame))
         
         startGame()
     }

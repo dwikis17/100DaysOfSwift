@@ -79,7 +79,6 @@ class ViewController: UIViewController {
     
     
     func setupGuessLabel() {
-
         view.addSubview(incorrectGuessLabel)
         incorrectGuessLabel.translatesAutoresizingMaskIntoConstraints = false
         incorrectGuessLabel.text = "\(incorrectGuessCount)/5"

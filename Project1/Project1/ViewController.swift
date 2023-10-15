@@ -11,6 +11,8 @@ class ViewController: UITableViewController {
 
     var pictures = [String]()
    
+    var pictDictionary = [String: Int]()
+    
     @IBOutlet var tableCell: UITableViewCell!
     
     override func viewDidLoad() {
@@ -33,10 +35,23 @@ class ViewController: UITableViewController {
         for item in items {
             if item.hasPrefix("nssl"){
                 pictures.append(item)
+                pictDictionary[item] = 0
             }
         }
         
         pictures.sort()
+    }
+    
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(pictDictionary),
+            let savedPictures = try? jsonEncoder.encode(pictures) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "pictDictionary")
+            defaults.set(savedPictures, forKey: "pictures")
+        } else {
+            print("Failed to save data.")
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,7 +64,7 @@ class ViewController: UITableViewController {
         
     
         cell.textLabel?.text = pictures[indexPath.row]
-        
+        cell.detailTextLabel?.text = "Viewed \(pictDictionary[pictures[indexPath.row]]) times"
         return cell
     }
     
@@ -61,6 +76,11 @@ class ViewController: UITableViewController {
             
             navigationController?.pushViewController(vc, animated: true)
         }
+        let picture = pictures[indexPath.row]
+        pictDictionary[picture]! += 1
+        save()
+        print(pictDictionary[picture]!)
+        tableView.reloadData()
     }
 
 }

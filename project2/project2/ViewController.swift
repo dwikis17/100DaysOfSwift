@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     
     var countries = [String]()
     var scoreCount = 0
+    var highScore = 0
     
     var correctAnswer = 1
     
@@ -24,7 +25,8 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let defaults = UserDefaults.standard
+      
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
         
         button1.layer.borderWidth = 1
@@ -41,6 +43,30 @@ class ViewController: UIViewController {
         
         askQuestion()
         
+        highScore = loadHighScore()
+        print(highScore)
+        
+    }
+    
+    func loadHighScore() -> Int {
+        let defaults = UserDefaults.standard
+        if let savedData = defaults.object(forKey: "highScore") as? Data {
+            let jsonDecoder = JSONDecoder()
+            if let loadedHighScore = try? jsonDecoder.decode(Int.self, from: savedData) {
+                return loadedHighScore
+            }
+        }
+        return 0 // Return nil if there is no saved highScore or if decoding fails.
+    }
+    
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(scoreCount){
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "highScore")
+        } else {
+            print("Failed to save data.")
+        }
     }
 
     func askQuestion(action: UIAlertAction! = nil) {
@@ -76,6 +102,15 @@ class ViewController: UIViewController {
             let ac = UIAlertController(title: "Last question", message: "Your Final score is \(scoreCount)", preferredStyle: .alert)
             
             ac.addAction(UIAlertAction(title: "Continue", style: .destructive, handler: askQuestion) )
+            
+            if(scoreCount > highScore) {
+              
+                let highScoreAc = UIAlertController(title: "New High Score", message: "You have new high score of \(scoreCount), previous was \(highScore)", preferredStyle: .alert)
+                
+                highScoreAc.addAction(UIAlertAction(title: "OK", style: .default, handler: askQuestion))
+                present(ac, animated: true)
+                save()
+            }
           
             present(ac, animated: true)
             scoreCount = 0
